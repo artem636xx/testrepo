@@ -1,28 +1,28 @@
-name: Example Workflow
-on: 
+name: ETL Workflow
+
+on:
   push:
     branches:
       - main
 
 jobs:
-  build:
+  ETL:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Check out code
-      uses: actions/checkout@v2
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Build
-      run: npm run build
-
-    - name: Deploy
-      run: |
-        echo "Deploying to production..."
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      
+      - name: Extract Data
+        run: echo "1,2,3,4,5" > data.txt
+      
+      - name: Transform Data
+        run: |
+          input=$(<data.txt)
+          transformed=$(echo "$input" | tr ',' '\n' | awk '{print $1 * 10}' | paste -sd "," -)
+          echo "$transformed" > transformed_data.txt
+      
+      - name: Load Data
+        run: |
+          while IFS=',' read -r item; do
+            echo "Loading item: $item"
+          done < transformed_data.txt
