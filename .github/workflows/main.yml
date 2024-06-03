@@ -1,5 +1,5 @@
 name: NPM Test
-
+import npm
 on:
   push:
     branches:
